@@ -5,116 +5,114 @@
 using namespace std;
 
 class Books
-{
-      string nameBook;
-      string nameAutor;
-      int flag;
-      int ID;
-public:
-      Books();
-      ~Books();
-      void newBooks();
-      void viewBook();
-};
+  {
+        string nameBook;
+        string nameAutor;
+  public:
+        int ID;
+        int flag;                                                    //Флаг наличия на руках или в библиотеке
+        Books();
+        ~Books();
+        void newBooks(int currentNumberBook);
+        void viewBook();
+  };
 Books::Books()
 	{
 	}
 Books::~Books()
 	{
 	}
-void Books::newBooks()
+void Books::newBooks(int currentNumberBook)
     {
     fflush(stdin); 
     cout<<"\n";
     cout<<"Вводите латинницей"<<endl; 
-    cout<<"Введите ID: "<<endl;
-    cin>>ID;   
+    ID=currentNumberBook;   
     fflush(stdin); 
     cout<<"Введите название книги: "<<endl;
     getline(cin,nameBook);
     cout<<"Введите имя автора:     "<<endl;
     getline(cin,nameAutor); 
-    cout<<"Укажите наличие книги в билиотеке 1- в налчие, 0 - отсуствует: "<<endl;
+    cout<<"Укажите наличие книги в билиотеке 1- в наличие, 0 - отсуствует: "<<endl;
     cin>>flag;
     cout<<"\n";
     }
 void Books::viewBook()
-    {
-    cout<<"\n";
-    cout<<"ID:"<<ID<<endl;	
-    cout<<"Название книги: "<<nameBook<<endl;
-    cout<<"Имя автора:     "<<nameAutor<<endl;
-    cout<<"Наличие книги в билиотеке 1- в налчие, 0 - отсуствует: "<<flag<<endl;
-    cout<<"\n";
-    }     
+  {
+      cout<<"\n";
+      cout<<"ID:"<<ID<<endl;  
+      cout<<"Название книги: "<<nameBook<<endl;
+      cout<<"Имя автора:     "<<nameAutor<<endl;
+      cout<<"Наличие книги в билиотеке 1- в налчие, 0 - отсуствует: "<<flag<<endl;
+      cout<<"\n";
+  }   
 
 
-void menu(Books *p);                                        
+void menu(Books *pointerOnFirstBook);                                        
 void showmenu();                                   
-void addBook(Books *p);
-void viewBook(Books *p,int i);
+void addBook(Books *currentPointer,int currentNumberBook);
+void viewBook(Books *pointerOnFirstBook,int tmpSumAllBooks);
+
 
 
 int main()
-{
-    setlocale(LC_ALL,"RUS");
-    Books book[10];
-    menu(book);
-    system("PAUSE");
-    return EXIT_SUCCESS;
-}
+  {
+      setlocale(LC_ALL,"RUS");
+      Books book[10];
+      menu(book);
+      system("PAUSE");
+      return EXIT_SUCCESS;
+  }
 
-void addBook(Books *p)
-{
-    p->newBooks();
+void addBook(Books *currentPointer,int currentNumberBook)             //Добавление нового объекта класса Book
+  {
+      currentPointer->newBooks(currentNumberBook);
 
-}
+  }       
 
-void viewBook(Books *p,int i)
-{
-    int j;	
-	for(j=0;j<i;j++)
+void viewBook(Books *pointerOnFirstBook,int tmpSumAllBooks)           //Вывод на экран всех объектов класса Book
+  {
+    for(int j=0;j<tmpSumAllBooks;j++)
+      {
+      pointerOnFirstBook->viewBook();
+      pointerOnFirstBook++;
+      }
+  }      
+void menu(Books *pointerOnFirstBook)
+  {
+    int tmpSumAllBooks=0;
+    Books *currentPointer;
+    currentPointer=pointerOnFirstBook;
+
+    char ch = 0;
+    while (ch != '0')
     {
-    p->viewBook();
-    p++;
+    showmenu();
+      fflush(stdin);
+      cin>>ch;
+      switch (ch)
+      {
+      case '1':
+        viewBook(pointerOnFirstBook,tmpSumAllBooks);
+        break;
+      case '2':
+        tmpSumAllBooks++;
+        addBook(currentPointer,tmpSumAllBooks);
+        currentPointer++;
+        break;
+      case '0':
+        cout<<"\nGoodbay!\n\n";
+        break;
+      default:
+        cout<<"\nМимо\n\n";
+        break;
+      }
     }
-}
-
-void menu(Books *p)
-{
-	int i=0;
-	Books *view;
-	view=p;
-
-	char ch = 0;
-	while (ch != '0')
-	{
-	showmenu();
-		fflush(stdin);
-		cin>>ch;
-		switch (ch)
-		{
-		case '1':
-			viewBook(view,i);
-			break;
-		case '2':
-		   i++;
-           addBook(p);
-           	p++;
-			break;			
-		case '0':
-			cout<<"\nGoodbay!\n\n";
-			break;
-		default:
-			cout<<"\nМимо\n\n";
-			break;
-		}
-	}
-}
+  }
 void showmenu()
-{
-	cout<<"Меню:\n";
-	cout<<"Введите 1 чтобы вывести все карточки на экран \n";
-	cout<<"Введите 2 создать новую карточку\n";
-	cout<<"Введите 0 чтобы выйти\n";
-}
+  {
+ 	cout<<"Меню:\n";
+ 	cout<<"Введите 1 чтобы вывести все карточки на экран \n";
+ 	cout<<"Введите 2 создать новую карточку\n";
+ 	cout<<"Введите 0 чтобы выйти\n";
+  }
